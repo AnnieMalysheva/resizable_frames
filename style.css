@@ -1,0 +1,21 @@
+body {
+    margin: 0;
+}
+
+.wrapper {
+    width: 100%;
+    height: 100%;
+    display: inline-flex;
+}
+
+.div1 {
+    width: 50%;
+    height: 500px;
+    background-color: royalblue;
+}
+
+.div2 {
+    width: 50%;
+    height: 500px;
+    background-color: forestgreen;
+}
