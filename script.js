@@ -1,19 +1,55 @@
-var frame2,
-    leftBound;
+var frame,
+    bounds,
+    x,
+    leftBound,
+    minWidth;
 
-frame2 = document.getElementById('div2');
+minWidth = 550;
 
-document.addEventListener('mouseover', onMouseDown);
+var clicked = {};
+
+
+frame = document.getElementById('div2');
+
+document.addEventListener('mousedown', onMouseDown);
+document.addEventListener('mouseup', onMouseUp);
+
+function calculate(e) {
+
+    bounds = frame.getBoundingClientRect();
+    x = e.clientX - bounds.left;
+    leftBound = x < 10 && x > 0;
+
+}
 
 function onMouseDown(e) {
 
-    var bounds = frame2.getBoundingClientRect();
-    var x = e.clientX - bounds.left;
-    leftBound = x <10;
+    calculate(e);
+
+    clicked = {
+        cx: e.clientX,
+        x: x,
+        w: bounds.width,
+        leftBound: leftBound
+    };
 
     if (leftBound) {
-        frame2.style.cursor = 'ew-resize';
+
+        frame.style.cursor = 'ew-resize';
     } else {
-        frame2.style.cursor = 'default';
+        frame.style.cursor = 'default';
     }
 }
+
+function onMouseUp(e) {
+
+    calculate(e);
+
+    var currentWidth = Math.max(clicked.cx + clicked.w - e.clientX, minWidth);
+    if (currentWidth > minWidth && currentWidth > bounds.width) {
+        frame.style.width = currentWidth + 'px';
+        frame.style.left = e.clientX + 'px';
+    }
+
+}
+
