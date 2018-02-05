@@ -1,83 +1,41 @@
 var frame1,
     frame2,
-    bounds,
-    x,
-    leftBound,
-    rightBound,
-    minWidth;
+    resize,
+    wrapper,
+    container;
 
-minWidth = 550;
-
-var clicked;
+var isResizing = false;
 
 frame1 = document.getElementById('div1');
 frame2 = document.getElementById('div2');
+resize = document.getElementById('resize');
+wrapper = document.getElementById('wrapper');
 
-document.addEventListener('mousedown', onMouseDown);
+resize.addEventListener('mousedown', onMouseDown);
+document.addEventListener('mousemove', onMouseMove);
 document.addEventListener('mouseup', onMouseUp);
 
-function calculate(e) {
+function onMouseDown() {
 
-    bounds = frame2.getBoundingClientRect();
-    x = e.clientX - bounds.left;
-    leftBound = x < 10 && x > 0;
-    rightBound = x < 0;
+    isResizing = true;
 
 }
 
-function onMouseDown(e) {
+function onMouseMove(e) {
 
-    calculate(e);
+    if (!isResizing) return;
 
-    console.log(clicked);
+    requestAnimationFrame(onMouseMove);
 
-    clicked = {
-        cx: e.clientX,
-        x: x,
-        w: bounds.width,
-        leftBound: leftBound,
-        rightBound: rightBound
-    };
+    container = wrapper.getBoundingClientRect();
 
-    if (0 < x < 10 || x < 0) {
-        frame2.style.cursor = 'ew-resize';
-    } else {
-        frame2.style.cursor = 'default';
-    }
-}
-
-function onMouseUp(e) {
-
-    calculate(e);
-
-    console.log(clicked);
-
-    if (clicked && (clicked.leftBound || clicked.rightBound)) {
-        var currentWidth;
-
-        if (clicked.leftBound) {
-
-            currentWidth = Math.max(clicked.cx + clicked.w - e.clientX, minWidth);
-            if (currentWidth > minWidth && currentWidth > bounds.width) {
-                frame2.style.width = currentWidth + 'px';
-                frame2.style.left = e.clientX + 'px';
-
-                frame1.style.width = e.clientX + 'px';
-            }
-
-        }
-
-        if (clicked.rightBound) {
-            currentWidth = Math.max(clicked.cx + clicked.w - e.clientX, minWidth);
-            if (currentWidth < bounds.width) {
-                frame1.style.width = e.clientX + 'px';
-
-                frame2.style.left = e.clientX + 'px';
-                frame2.style.width = currentWidth + 'px';
-            }
-        }
-
-    }
+    frame1.style.width = e.clientX + 'px';
+    frame2.style.width = container.width - e.clientX + 'px';
 
 }
 
+function onMouseUp() {
+
+    isResizing = false;
+
+}

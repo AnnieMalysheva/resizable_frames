@@ -10,12 +10,19 @@ body {
 
 .div1 {
     width: 50%;
-    height: 500px;
+    height: 100vh;
     background-color: royalblue;
 }
 
 .div2 {
     width: 50%;
-    height: 500px;
+    height: 100vh;
     background-color: forestgreen;
+}
+
+#resize {
+    width: 6px;
+    left: -4px;
+    height: 100vh;
+    cursor: ew-resize;
 }
